@@ -20,6 +20,20 @@ class Order(models.Model):
         created_at = models.DecimalField(auto_now_add=True)
         updated_at = models.DateTimeField(auto_now=True)
 
-        
 
 
+
+class OrderItem(models.Model):
+
+    order = models.ForeignKey("Order", on_delete=CASCADE, related_name='items',)
+    prodect = models.ForeignKey("products.Product", on_delete=models.PROTECT, related_name='order_item',)
+
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)],)
+
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))],)
+
+    created_at =  models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"Order  #{self.order_id} {self.product.name}"
